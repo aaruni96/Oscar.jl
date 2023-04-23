@@ -71,10 +71,10 @@ end
 @doc raw"""
     homogeneity_vector(G::Vector{<:MPolyElem})
 
-If it exists, a positive `Vector{fmpz}` under which every of `G` is weighted homogeneous.  Otherwise, `nothing`.
+If it exists, a positive `Vector{fmpz}` under which every element of `G` is weighted homogeneous.  Otherwise, `nothing`.
 
 # Note
-Suppose `G` is a reduced Groebner basis of an ideal `I` with respect to a global ordering. If a `Vector{fmpz}` is returned, then `I` will be weighted homogeneous with respect to it.  If `nothing` is returned, then `I` is not weighted homogeneous with respect to any positive weight vector.
+Suppose `G` is the reduced Groebner basis of an ideal `I` with respect to a global ordering. If a `Vector{fmpz}` is returned, then `I` is weighted homogeneous with respect to it.  If `nothing` is returned, then `I` is not weighted homogeneous with respect to any positive weight vector.
 
 # Examples
 ```jldoctest
@@ -150,9 +150,9 @@ end
     maximal_groebner_cone(G::Vector{<:MPolyElem}, ord::MonomialOrdering, homogeneityWeight::Union{Nothing,Vector{fmpz}}=nothing)
 
 # Input
-- `G`: A reduced Groebner basis of an ideal `I` with respect to `ord`,
+- `G`: The reduced Groebner basis of an ideal `I` with respect to `ord`,
 - `ord`: A global monomial ordering,
-- `homogeneityWeight`: Either `Nothing` or a positive weight vector under which `I` is weighted homogeneous.
+- `homogeneityWeight`: Either `nothing` or a positive weight vector under which `I` is weighted homogeneous.
 
 # Output
 A `Cone` that is the maximal Groebner cone of `I` with respect to monomial ordering `ord`.  If `homogeneityWeight==nothing`, the Groebner cone will be contained in the positive orthant.  If `homogeneityWeight!=nothing`, the Groebner cone will not be restricted to the positive orthant and have a lineality space that contains `homogeneityWeight`.
@@ -243,7 +243,7 @@ end
 
 
 
-# Returns an interior points on each facet.
+# Returns an interior point on each facet, respectively.
 # We use unique_identifying_points because we also use them to track which facets have been traversed
 function interior_facet_points(C::Cone)
     return unique_identifying_point.(faces(C,dim(C)-1))
@@ -329,7 +329,7 @@ end
 # - u is an interior facet point of the maximal Groebner cone around ordG
 # - v is an outer normal vector of the facet containing u
 # Returns:
-# - a reduced Groebner basis with respect to the adjacent ordering
+# - the reduced Groebner basis with respect to the adjacent ordering
 #     in direction v
 function groebner_flip(G::Vector{<:MPolyElem},
                        ordG::MonomialOrdering,
