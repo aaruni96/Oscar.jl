@@ -15,10 +15,12 @@
 @doc raw"""
     homogeneity_space(G::Vector{<:MPolyElem})
 
-A `Cone` that is the space of all weight vectors under which all elements of `G` are weighted homogeneous.  The cone will be a linear subspace without any rays.
+Return a `Cone` that is the space of all weight vectors under which all elements of `G` are weighted homogeneous.  The cone will be a linear subspace without any rays.
 
-# Note
-If `G` is a reduced Groebner basis of an ideal `I` with respect a global ordering, then the returned cone is the space of all weight vectors with respect to which `I` is weighted homogeneous.
+!!! note
+    If `G` is a reduced Groebner basis of an ideal `I` with respect a global
+    ordering, then the returned cone is the space of all weight vectors with
+    respect to which `I` is weighted homogeneous.
 
 # Examples
 ```jldoctest
@@ -71,7 +73,8 @@ end
 @doc raw"""
     homogeneity_vector(G::Vector{<:MPolyElem})
 
-If it exists, a positive `Vector{fmpz}` under which every element of `G` is weighted homogeneous.  Otherwise, `nothing`.
+Return a positive `Vector{fmpz}` under which every element of `G` is weighted
+homogeneous. If no such vector exists, return `nothing`.
 
 # Note
 Suppose `G` is the reduced Groebner basis of an ideal `I` with respect to a global ordering. If a `Vector{fmpz}` is returned, then `I` is weighted homogeneous with respect to it.  If `nothing` is returned, then `I` is not weighted homogeneous with respect to any positive weight vector.
@@ -111,8 +114,8 @@ julia> G3 = [x1^2+x2,x2^2+x3,x3+1]
  x2^2 + x3
  x3 + 1
 
-julia> homogeneity_vector(G3)
-
+julia> homogeneity_vector(G3) == nothing
+true
 
 ```
 """
@@ -411,18 +414,13 @@ end
 @doc raw"""
     groebner_fan(I::MPolyIdeal; return_groebner_bases::Bool=false, return_orderings::Bool=false, verbose_level::Int=0)
 
-# Input
-- `I`: A multivariate polynomial ideal over a coefficient field
-- `return_groebner_bases`: If `true`, return all Groebner bases computed during the traversal
-- `return_orderings`: If `true`, return all monomial orderings used during the traversal
-- `verbose_level`: If positive, print out how many cones have been computed during the traversal
+Return a `PolyhedralFan` representing the Groebner fan of `I`, where is a multivariate polynomial ideal over a field.
 
-# Output
-A `PolyhedralFan` that is the Groebner fan of `I`.
+If `verbose_level` is positive, also print how many cones have been computed during the traversal.
 
 If `I` is not weighted homogeneous with respect to a positive weight vector, the Groebner fan will be restricted to the positive orthant.  Otherwise, the Groebner fan will span the entire space and have a non-trivial lineality space.
 
-If `return_groebner_bases==true`, returns a dictionary whose keys are interior points of the maximal cones and whose values are the Groebner bases for those cones.  Their union will be a universal Groebner basis.
+If `return_groebner_bases==true`, also return a dictionary whose keys are interior points of the maximal cones and whose values are the Groebner bases for those cones.  Their union will be a universal Groebner basis.
 
 If `return_orderings==true`, returns a dictionary whose keys are interior points of the maximal Groebner cones and whose values are monomial orderings for those cones.  These orderings are suboptimal and hence it is generally recommended to create new orderings with the interior points.  However they do contain information on how the fan was traversed.
 
