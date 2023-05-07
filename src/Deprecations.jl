@@ -235,6 +235,7 @@ end
 @deprecate starsubdivision(PF::_FanLikeType{T}, n::Int) where T<:scalar_types star_subdivision(PF, n)
 
 # Deprecated after 0.12.1
+# PolyhedralComplex -> polyhedral_complex
 function PolyhedralComplex{T}(
                 polyhedra::IncidenceMatrix, 
                 vr::AbstractCollection[PointVector], 
@@ -261,7 +262,7 @@ function PolyhedralComplex(iter::SubObjectIterator{Polyhedron{T}}) where T<:scal
 end
 @deprecate PolyhedralComplex(p::Polymake.BigObject) polyhedral_complex(p)
 
-
+# PolyhedralFan -> polyhedral_fan
 @deprecate PolyhedralFan(p::Polymake.BigObject) polyhedral_fan(p)
 function PolyhedralFan{T}(Rays::AbstractCollection[RayVector], 
                           LS::Union{AbstractCollection[RayVector], Nothing}, 
@@ -292,4 +293,12 @@ function PolyhedralFan{T}(Rays::AbstractCollection[RayVector], Incidence::Matrix
   Base.depwarn("'PolyhedralFan{$T}(x...)' is deprecated, use 'polyhedral_fan($T, x...)' instead.", :PolyhedralFan)
   return polyhedral_fan(T, Rays, Incidence)
 end
+
+# SubdivisionOfPoints -> subdivision_of_points
+@deprecate SubdivisionOfPoints(points, C) subdivision_of_points(points, C)
+function SubdivisionOfPoints{T}(points, C) where T<:scalar_types
+  Base.depwarn("'SubdivisionOfPoints{$T}(x...)' is deprecated, use 'subdivision_of_points($T, x...)' instead.", :SubdivisionOfPoints)
+  return subdivision_of_points(T, points, C)
+end
+@deprecate SubdivisionOfPoints(p::Polymake.BigObject) subdivision_of_points(p)
 

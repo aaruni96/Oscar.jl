@@ -165,7 +165,7 @@ export SpecOpenRingElem
 export StdSpec
 export SubObjectIterator
 export SubQuoHom
-export SubdivisionOfPoints
+export SubdivisionOfPoints, subdivision_of_points
 export SubquoModule
 export SubquoModuleElem
 export ToricCoveredScheme
@@ -1271,7 +1271,6 @@ export structure_tropical_jacobian
 export sub
 export subalgebra_membership
 export subalgebra_membership_homogeneous
-export subdivision_of_vertices
 export subgroup_reps
 export subquo_type
 export subquotient
