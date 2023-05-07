@@ -453,7 +453,7 @@ ideal(-x1*x2 + x3*x4)
 ```
 """
 function toric_ideal(R::MPolyRing, antv::AffineNormalToricVariety)
-    cone = Cone(pm_object(antv).WEIGHT_CONE)
+    cone = cone(pm_object(antv).WEIGHT_CONE)
     gens = pm_object(cone).CONE_TORIC_IDEAL.BINOMIAL_GENERATORS
     return binomial_exponents_to_ideal(R, gens)
 end
@@ -481,7 +481,7 @@ ideal(-x1*x2 + x3*x4)
 ```
 """
 @attr MPolyIdeal function toric_ideal(antv::AffineNormalToricVariety)
-    cone = Cone(pm_object(antv).WEIGHT_CONE)
+    cone = cone(pm_object(antv).WEIGHT_CONE)
     n = length(hilbert_basis(cone))
     R, _ = polynomial_ring(coefficient_ring(antv), n, cached=false)
     return toric_ideal(R, antv)
@@ -910,7 +910,7 @@ julia> dim(nef)
 1
 ```
 """
-@attr Cone nef_cone(v::NormalToricVariety) = Cone(pm_object(v).NEF_CONE)
+@attr Cone nef_cone(v::NormalToricVariety) = cone(pm_object(v).NEF_CONE)
 
 
 """
@@ -930,7 +930,7 @@ julia> dim(mori)
 1
 ```
 """
-@attr Cone mori_cone(v::NormalToricVariety) = Cone(pm_object(v).MORI_CONE)
+@attr Cone mori_cone(v::NormalToricVariety) = cone(pm_object(v).MORI_CONE)
 
 
 @doc raw"""
@@ -1039,7 +1039,7 @@ julia> affine_open_covering(p2)
 @attr Vector{AffineNormalToricVariety} function affine_open_covering(v::AbstractNormalToricVariety)
     charts = Vector{AffineNormalToricVariety}(undef, pm_object(v).N_MAXIMAL_CONES)
     for i in 1:pm_object(v).N_MAXIMAL_CONES
-        charts[i] = affine_normal_toric_variety(Cone(Polymake.fan.cone(pm_object(v), i-1)))
+        charts[i] = affine_normal_toric_variety(cone(Polymake.fan.cone(pm_object(v), i-1)))
     end
     return charts
 end
