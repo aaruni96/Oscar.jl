@@ -12,6 +12,8 @@
 #
 ################################################################################
 
+using Distributed
+
 # Oscar needs some complicated setup to get the printing right. This provides a
 # helper function to set this up consistently.
 doctestsetup() = :(using Oscar; Oscar.AbstractAlgebra.set_current_module(@__MODULE__))
@@ -111,9 +113,41 @@ function open_doc()
     end
 end
 
+function start_doc_preview_server(;open_browser::Bool = true, port::Int = 8000)
+  build_dir = normpath(Oscar.oscardir, "docs", "build")
+  println(build_dir)
+  #check if  docu_server_future is defined
+  if @isdefined docu_server_future
+    #check if docu_server_future is "busy"
+    if !isready(docu_server_future)
+      #server is already running, just start browser
+      #how does one start browser?
+      println("Just starting browser, nothing else")
+      return nothing
+    end
+    println("Server was already running")
+    server_worker = docu_server_future.where
+  else
+    println("Starting serevr from scratch!")
+    server_worker = Distributed.addprocs(1)[1]
+    @spawnat server_worker @eval using Pkg
+    @spawnat server_worker Pkg.activate(temp=true)
+    @spawnat server_worker Pkg.add("LiveServer")
+    @spawnat server_worker Pkg.add("Oscar")
+    @spawnat server_worker @eval using LiveServer
+    @spawnat server_worker @eval using Oscar
+  end
+  println("starting server with options $server_worker, $build_dir, $open_browser, and $port")
+  global docu_server_future = @spawnat server_worker LiveServer.serve(dir = build_dir, launch_browser = open_browser, port = port)
+  println(docu_server_future)
+  println(isready(docu_server_future))
+  println(fetch(docu_server_future))
+  #@info "Starting server with PID $(getpid(live_server_process)) listening on 127.0.0.1:$port"
+  return nothing
+end
 
 @doc raw"""
-    build_doc(; doctest=false, strict=false, open_browser=true)
+    build_doc(; doctest=false, strict=false, open_browser=true, start_server = false)
 
 Build the manual of `Oscar.jl` locally and open the front page in a
 browser.
@@ -148,7 +182,7 @@ using Revise, Oscar;
 The first run of `build_doc` will take the usual few minutes, subsequently runs
 will be significantly faster.
 """
-function build_doc(; doctest=false, strict=false, open_browser=true)
+function build_doc(; doctest=false, strict=false, open_browser=true, start_server = false)
   versioncheck = (VERSION.major == 1) && (VERSION.minor >= 7)
   versionwarn = 
 "The Julia reference version for the doctests is 1.7 or later, but you are using
@@ -162,7 +196,9 @@ $(VERSION). Running the doctests will produce errors that you do not expect."
   Pkg.activate(docsproject) do
     Base.invokelatest(Main.BuildDoc.doit, Oscar; strict=strict, local_build=true, doctest=doctest)
   end
-  if open_browser
+  if start_server
+    start_doc_preview_server(open_browser = open_browser)
+  elseif open_browser
     open_doc()
   end
   if doctest != false && !versioncheck
