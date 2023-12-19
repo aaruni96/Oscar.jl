@@ -2,4 +2,4 @@
 # what exactly does "first install" mean?
 
 using Pkg
-Pkg.Registry.add(RegistrySpec(url = "git@github.com:aaruni96/blessed-by-oscar.git"))
+Pkg.Registry.add(RegistrySpec(url = "git@github.com:aaruni96/deps-of-oscar.git"))
