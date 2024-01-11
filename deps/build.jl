@@ -3,3 +3,5 @@
 
 using Pkg
 Pkg.Registry.add(RegistrySpec(url = "git@github.com:aaruni96/deps-of-oscar.git"))
+
+Pkg.add("GAP_pkg_io")
