@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - name: SUccess
+      - name: Success
         run: true
 
 # adapted from gap-system/gap
@@ -46,6 +46,7 @@ jobs:
           needs_context: ${{ toJson(needs) }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           notify_on_changed_status: true
+          event: workflow_dispatch
       - name: Send slack notification
         uses: act10ns/slack@v2
         if: ${{ steps.should_notify.outputs.should_send_message == 'yes' }}
