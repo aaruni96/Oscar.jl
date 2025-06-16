@@ -25,7 +25,7 @@ jobs:
         with:
           fetch-depth: 2
       - name: Success
-        run: false
+        run: true
 
 # adapted from gap-system/gap
   slack-notification:
@@ -46,7 +46,7 @@ jobs:
           branch: ${{ steps.get-branch.outputs.branch }}
           needs_context: ${{ toJson(needs) }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          notify_on_changed_status: true
+          notify_on_changed_status: false
           event: workflow_dispatch
       - name: Send slack notification
         uses: act10ns/slack@v2
