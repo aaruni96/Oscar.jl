@@ -32,6 +32,7 @@ jobs:
     name: Send Slack notification on status change
     needs:
       - extra-long-test
+    if: always()
     runs-on: ubuntu-latest
 
     steps:
