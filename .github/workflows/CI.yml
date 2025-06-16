@@ -46,7 +46,7 @@ jobs:
           branch: ${{ steps.get-branch.outputs.branch }}
           needs_context: ${{ toJson(needs) }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          notify_on_changed_status: false
+          notify_on_changed_status: ''
           event: workflow_dispatch
       - name: Send slack notification
         uses: act10ns/slack@v2
