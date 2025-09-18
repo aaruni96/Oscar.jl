@@ -1,34 +1,44 @@
-module Primes
-# internal helper function for filtering
-function divides_and_not_equals(i, e)
-    # if e, the list iterator divides i, the current list element
-    if (e % i) == 0
-        # if i is not equal to e
-        if i != e
-            return true
-        end
-    end
-    return false
-end
+module Sieve
+
+# Implementation of the Sieve of Eratosthenes algorithm as described at
+# https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
 
 @doc raw"""
-    primes(n::int)
+    sieve(n::int) -> Vector{Int}
 
 Returns all prime numbers until the input n.
+
+# Example
+
+```jlcon
+julia> Main.Sieve.sieve(20)
+8-element Vector{Int64}:
+  2
+  3
+  5
+  7
+ 11
+ 13
+ 17
+ 19
+```
 """
-function sieve(n::Int)::Vector{Int}
+function sieve(n::Int)
     @assert n > 1
     candidate_list = collect(2:n)
     upper_limit = Int(floor(sqrt(length(candidate_list))))
-
-    for i in 2:upper_limit
-        filter!(e -> !divides_and_not_equals(i, e), candidate_list)
+    for i in 1:upper_limit
+        if candidate_list[i] == 0
+            continue
+        end
+        k = candidate_list[i]
+        for j in (i+k):k:(n - 1)
+            candidate_list[j] = 0
+        end
     end
-
-    return candidate_list
-
+    return filter(e -> e != 0, candidate_list)::Vector{Int}
 end
 
-export primes
+export sieve
 
 end # module
