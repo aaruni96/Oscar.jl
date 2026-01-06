@@ -20,3 +20,16 @@ function profile(gso::ArbMatrix)
     end
     return log.(2, BigFloat.(l))::Vector{BigFloat}
 end
+
+function spread(profile::Vector{ArbFieldElem})
+  return maximum(profile) - minimum(profile)
+end
+
+function potential(profile::Vector{ArbFieldElem})
+  n = length(profile)
+  a = 0
+  for i in 1:n
+    a += (n - i + 1) * profile[i]
+  end
+  return a
+end
